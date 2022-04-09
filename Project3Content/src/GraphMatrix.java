@@ -109,6 +109,8 @@ public class GraphMatrix implements Graph{
         ArrayList<Integer> arr = new ArrayList<>();
         Queue<Integer> tmp = new LinkedList<Integer>();//initialize queue
         tmp.add(v);//enqueue starting vertex
+        //这里不知道要不要把v标为已读
+        Visited[v] = true;//mark the stating vertex as visited
         while (!tmp.isEmpty()){
             int target = tmp.remove();//dequeue the queue and assign the dequeued vertex to target
             arr.add(target);//add the dequeued vertex to arrayList
