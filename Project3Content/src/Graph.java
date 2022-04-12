@@ -10,9 +10,6 @@ interface Graph { // Graph class ADT
   // Return the current number of edges. This operation must be a constant time operation.
   int edgeCount();
 
-  // Return an int[] containing the edges of vertex, v. The array should contain vertex ids or labels of the adjacent vertices.
-  int[] getEdges(int v);
-
   // Adds a new edge from node v to node w with weight wgt
   void addEdge(int v, int w, int wgt);
 
@@ -20,7 +17,7 @@ interface Graph { // Graph class ADT
   int getWeight(int v, int w);
 
  // Set the weight of v and w.
-  void setWeight(int v, int w);
+ void setWeight(int v, int w, int wgt);
 
   // Removes the edge from the graph.
   void removeEdge(int v, int w);

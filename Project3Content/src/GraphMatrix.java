@@ -39,12 +39,6 @@ public class GraphMatrix implements Graph{
         return num_e;//return number of edges
     }
 
-    // Return an int[] containing the edges of vertex, v. The array should contain vertex ids or labels of the adjacent vertices.
-    public int[] getEdges(int v){
-        int[] arr = new int[2];
-        return arr;
-    }
-
     // Adds a new edge from node v to node w with weight wgt
     public void addEdge(int v, int w, int wgt){
         adjMatrix[v][w] = wgt;//set row v column w to wgt
@@ -57,7 +51,7 @@ public class GraphMatrix implements Graph{
     }
 
     // Set the weight of v and w.
-    public void setWeight(int v, int w){
+    public void setWeight(int v, int w, int wgt){
     }
 
     // Removes the edge from the graph.
@@ -132,14 +126,8 @@ public class GraphMatrix implements Graph{
         //either if w is within BFS(v) or if v is within BFS(w), there is a path between v and w
         this.resetVisited();//reset Visited
         ArrayList<Integer> accessibleV = this.BFS(v);//find every vertex that v can reach
-        ArrayList<Integer> accessibleW = this.BFS(w);//find every vertex that w can reach
         for (int i = 0; i < accessibleV.size(); ++i){//if w is within BFS(v), return true
             if (accessibleV.get(i) == w){
-                return true;
-            }
-        }
-        for (int i = 0; i < accessibleW.size(); ++i){//if v is within BFS(w), return true
-            if (accessibleW.get(i) == v){
                 return true;
             }
         }
