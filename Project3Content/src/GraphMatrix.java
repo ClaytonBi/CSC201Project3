@@ -18,7 +18,13 @@ public class GraphMatrix implements Graph{
 
     //parameterized constructor
     public GraphMatrix(int n){//n is number of vertices
-        init(n);//call init to initialize all local variables
+        if (n <= 0){//error condition: number of vertices is non-positive. If so, print error and initialize the graph with 1 vertex
+            System.out.println("Error: number of vertices can't be negative.");
+            init(1);
+        }
+        else{
+            init(n);//call init to initialize all local variables
+        }
     }
 
     // Initialize the graph with some number of vertices
@@ -41,29 +47,60 @@ public class GraphMatrix implements Graph{
 
     // Adds a new edge from node v to node w with weight wgt
     public void addEdge(int v, int w, int wgt){
-        adjMatrix[v][w] = wgt;//set row v column w to wgt
-        num_e++;//increment num_e
+        if ((v<0) || (v>=adjMatrix.length) || (w<0) || (w>= adjMatrix[0].length)){//error condition: index out of bounds, print error statement
+            System.out.println("Error: index out of bounds.");
+        }
+        else if (wgt <= 0){//error condition: entering a non-positive wgt
+            System.out.println("Error: invalid wgt.");
+        }
+        else{
+            adjMatrix[v][w] = wgt;//set row v column w to wgt
+            num_e++;//increment num_e
+        }
     }
 
     // Get the weight value for an edge
     public int getWeight(int v, int w){
-        return adjMatrix[v][w];//return the value at row v column w
+        if ((v<0) || (v>=adjMatrix.length) || (w<0) || (w>= adjMatrix[0].length)){//error condition: index out of bounds, print error statement
+            System.out.println("Error: index out of bounds.");
+            return 0;
+        }
+        else{
+            return adjMatrix[v][w];//return the value at row v column w
+        }
     }
 
     // Set the weight of v and w.
     public void setWeight(int v, int w, int wgt){
-        adjMatrix[v][w] = wgt;//set row v column w to wgt
-        num_e++;//increment num_e
+        if ((v<0) || (v>=adjMatrix.length) || (w<0) || (w>= adjMatrix[0].length)){//error condition: index out of bounds, print error statement
+            System.out.println("Error: index out of bounds.");
+        }
+        else if (wgt < 0){//error condition: entering a negative wgt
+            System.out.println("Error: invalid wgt.");
+        }
+        else{
+            adjMatrix[v][w] = wgt;//set row v column w to wgt
+            num_e++;//increment num_e
+        }
     }
 
     // Removes the edge from the graph.
     public void removeEdge(int v, int w){
-        adjMatrix[v][w] = 0;//set row v column w to 0
-        num_e--;//decrement num_e
+        if ((v<0) || (v>=adjMatrix.length) || (w<0) || (w>= adjMatrix[0].length)){//error condition: index out of bounds, print error statement
+            System.out.println("Error: index out of bounds.");
+        }
+        else{
+            adjMatrix[v][w] = 0;//set row v column w to 0
+            num_e--;//decrement num_e
+        }
     }
 
     // Returns true if and only if the graph has an edge between v and w.
     public boolean hasEdge(int v, int w){
+        if ((v<0) || (v>=adjMatrix.length) || (w<0) || (w>= adjMatrix[0].length)){//error condition: index out of bounds, print error statement
+            System.out.println("Error: index out of bounds.");
+            return false;
+        }
         if (adjMatrix[v][w] == 0){//return true if the wgt of edg v-w is 0
             return false;
         }
@@ -74,6 +111,10 @@ public class GraphMatrix implements Graph{
 
     // Returns an array containing vertex id's of the neighbors of v.
     public int[] neighbors(int v){
+        if ((v<0) || (v>=adjMatrix.length)){//error condition: index out of bounds, print error statement and return null
+            System.out.println("Error: index out of bounds.");
+            return null;
+        }
         int neighbor_count = 0;//initialize neighbor_count to count the number of neighbors
         for (int i = 0; i < adjMatrix.length; ++i){//the for loop counts the number of v's neighbors
             if (adjMatrix[v][i] > 0){
@@ -102,6 +143,10 @@ public class GraphMatrix implements Graph{
     // Index 0 of the array should be the starting vertex, v. Index 1 should be one of v's neighbors and so on.
     // Once BFS is completed, the ArrayList is returned.
     public ArrayList<Integer> BFS(int v){
+        if ((v<0) || (v>=adjMatrix.length)){//error condition: index out of bounds, print error statement and return null
+            System.out.println("Error: index out of bounds.");
+            return null;
+        }
         ArrayList<Integer> arr = new ArrayList<>();
         Queue<Integer> tmp = new LinkedList<Integer>();//initialize queue
         tmp.add(v);//enqueue starting vertex
@@ -123,6 +168,10 @@ public class GraphMatrix implements Graph{
 
     // Returns true if there is a path between v and w. Otherwise returns false. You may use the BFS method (above) for this method.
     public boolean hasPath(int v, int w){
+        if ((v<0) || (v>=adjMatrix.length) || (w<0) || (w>= adjMatrix[0].length)){//error condition: index out of bounds, print error statement
+            System.out.println("Error: index out of bounds.");
+            return false;
+        }
         //basic logic is to use BFS to find every vertex that v can reach and every vertex that w can reach
         //either if w is within BFS(v) or if v is within BFS(w), there is a path between v and w
         this.resetVisited();//reset Visited
