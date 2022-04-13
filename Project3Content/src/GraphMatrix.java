@@ -52,6 +52,8 @@ public class GraphMatrix implements Graph{
 
     // Set the weight of v and w.
     public void setWeight(int v, int w, int wgt){
+        adjMatrix[v][w] = wgt;//set row v column w to wgt
+        num_e++;//increment num_e
     }
 
     // Removes the edge from the graph.
@@ -103,7 +105,6 @@ public class GraphMatrix implements Graph{
         ArrayList<Integer> arr = new ArrayList<>();
         Queue<Integer> tmp = new LinkedList<Integer>();//initialize queue
         tmp.add(v);//enqueue starting vertex
-        //这里不知道要不要把v标为已读
         Visited[v] = true;//mark the stating vertex as visited
         while (!tmp.isEmpty()){
             int target = tmp.remove();//dequeue the queue and assign the dequeued vertex to target
@@ -136,7 +137,53 @@ public class GraphMatrix implements Graph{
 
     // Performs a topologicalSort if the graph and returns an ArrayList that contains the vertex labels/id in topologically sorted order. You must use BFS
     public ArrayList<Integer> topologicalSort(){
-        ArrayList<Integer> arr = new ArrayList<>();
+        this.resetVisited();//reset visited
+        ArrayList<Integer> arr = new ArrayList<>();//construct arr to contain the sorted vertices
+        int[] inDegrees = new int[adjMatrix.length];//construct inDegrees to contain the in-degrees of the vertex
+
+
+        //initialize the content of inDegrees
+        int count;
+        for (int i = 0; i < adjMatrix[0].length; ++i){//this for loop loops through each column of adjMatrix
+            count = 0;//set count to 0
+            for (int j = 0; j < adjMatrix.length; ++j){//for each position in the column, if the value > 0, increment count
+                if (adjMatrix[j][i] > 0){
+                    count++;
+                }
+            }
+            inDegrees[i] = count;//assign the count as the corresponding in-degree to position i in inDegrees
+        }
+
+
+        //sorting
+        boolean stopLoop = Visited[0];//initialize stopLoop for the while loop
+        for (int i = 0; i < Visited.length; ++i){//loop through all elements in Visited, stopLoop will only be true when all elements in Visited are true
+            stopLoop = stopLoop && Visited[i];
+        }
+        while (!stopLoop){
+            int target = -1;
+            for (int i = 0; i < Visited.length; ++i){//loop through each vertex
+                if ((Visited[i] == false) && (inDegrees[i] == 0)){//if the vertex is not visited and its in-degree is 0, assign its id to target and break inner loop
+                    target = i;
+                    break;
+                }
+            }
+            arr.add(target);//add target to arr
+            Visited[target] = true;//mark target as visited
+            int[] neighbor = neighbors(target);//get target's neighbor
+            for (int i = 0; i < neighbor.length; ++i){//decrement the in-degree of target's neighbors
+                inDegrees[neighbor[i]]--;
+            }
+
+
+            //update stopLoop
+            stopLoop = Visited[0];//initialize stopLoop for the while loop
+            for (int i = 0; i < Visited.length; ++i){//loop through all elements iun Visited, stopLoop will only be true when all elements in Visited are true
+                stopLoop = stopLoop && Visited[i];
+            }
+        }
+
+
         return arr;
     }
 }
