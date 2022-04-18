@@ -50,12 +50,19 @@ public class GraphMatrix implements Graph{
         if ((v<0) || (v>=adjMatrix.length) || (w<0) || (w>= adjMatrix[0].length)){//error condition: index out of bounds, print error statement
             System.out.println("Error: index out of bounds.");
         }
-        else if (wgt <= 0){//error condition: entering a non-positive wgt
+        else if (wgt < 0){//error condition: entering a negative wgt
             System.out.println("Error: invalid wgt.");
         }
         else{
+            //we should increment num_e if there is originally no edge from v to w and wgt > 0
+            if ((!this.hasEdge(v,w)) && (wgt > 0)){
+                num_e++;//increment num_e
+            }
+            //we should decrement num_e if there is originally an edge from v to w and wgt == 0
+            if ((this.hasEdge(v,w)) && (wgt == 0)){
+                num_e--;//decrement num_e
+            }//otherwise, the number of edges would not change
             adjMatrix[v][w] = wgt;//set row v column w to wgt
-            num_e++;//increment num_e
         }
     }
 
@@ -79,8 +86,15 @@ public class GraphMatrix implements Graph{
             System.out.println("Error: invalid wgt.");
         }
         else{
+            //we should increment num_e if there is originally no edge from v to w and wgt > 0
+            if ((!this.hasEdge(v,w)) && (wgt > 0)){
+                num_e++;//increment num_e
+            }
+            //we should decrement num_e if there is originally an edge from v to w and wgt == 0
+            if ((this.hasEdge(v,w)) && (wgt == 0)){
+                num_e--;//decrement num_e
+            }//otherwise, the number of edges would not change
             adjMatrix[v][w] = wgt;//set row v column w to wgt
-            num_e++;//increment num_e
         }
     }
 
@@ -90,8 +104,11 @@ public class GraphMatrix implements Graph{
             System.out.println("Error: index out of bounds.");
         }
         else{
+            //we should only decrement num_e when there is originally an edge from v to w before we remove the edge
+            if (this.hasEdge(v,w)){
+                num_e--;//decrement num_e
+            }
             adjMatrix[v][w] = 0;//set row v column w to 0
-            num_e--;//decrement num_e
         }
     }
 
@@ -173,7 +190,7 @@ public class GraphMatrix implements Graph{
             return false;
         }
         //basic logic is to use BFS to find every vertex that v can reach and every vertex that w can reach
-        //either if w is within BFS(v) or if v is within BFS(w), there is a path between v and w
+        //if w is within BFS(v), there is a path between v and w
         this.resetVisited();//reset Visited
         ArrayList<Integer> accessibleV = this.BFS(v);//find every vertex that v can reach
         for (int i = 0; i < accessibleV.size(); ++i){//if w is within BFS(v), return true
